@@ -56,6 +56,16 @@ sudo insmod kmod/igb_uio.ko
 #To restore device 82:00.0 to its original kernel binding:
 
 ./usertools/dpdk-devbind.py --bind=ixgbe 82:00.0
+# before compiling the application set few parameters
+
+export RTE_SDK=$HOME/DPDK
+export RTE_TARGET=x86_64-native-linuxapp-gcc
+
+#Check the total Huge pages
+grep Hugepagesize /proc/meminfo
+
+# check the free Huge pages
+grep HugePages_Free /proc/meminfo
 
 
 
