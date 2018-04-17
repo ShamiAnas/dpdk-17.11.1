@@ -41,13 +41,19 @@ make install T=x86_64-native-linuxapp-gcc
 #referred to above. It can be loaded as shown below:
 
 sudo modprobe uio
-sudo insmod kmod/igb_uio.ko
+sudo insmod build/kmod/igb_uio.ko
 
 # checking the status of network drivers binding 
 ./usertools/dpdk-devbind.py --status
 
 #To bind device eth1,``04:00.1``, to the uio_pci_generic driver:
 ./usertools/dpdk-devbind.py --bind=uio_pci_generic 04:00.1
+
+#To bind device eth1,``04:00.0``, to the igb_uio:
+./usertools/dpdk-devbind.py --bind=igb_uio 04:00.0
+./usertools/dpdk-devbind.py --bind=igb_uio 04:00.1
+./usertools/dpdk-devbind.py --bind=igb_uio 05:00.0
+./usertools/dpdk-devbind.py --bind=igb_uio 05:00.1
 
 #or, alternatively,
 
@@ -58,7 +64,7 @@ sudo insmod kmod/igb_uio.ko
 ./usertools/dpdk-devbind.py --bind=ixgbe 82:00.0
 # before compiling the application set few parameters
 
-export RTE_SDK=$HOME/DPDK
+export RTE_SDK=$HOME/dpdk-stable-17.11.1
 export RTE_TARGET=x86_64-native-linuxapp-gcc
 
 #Check the total Huge pages
@@ -66,6 +72,12 @@ grep Hugepagesize /proc/meminfo
 
 # check the free Huge pages
 grep HugePages_Free /proc/meminfo
+
+# Runing l2fwd
+./build/l2fwd -l 0-3 -n 4 -- -q 8 -p 0003
+
+# runing l3fwd
+./build/l3fwd -l 1 -n 4 -- -p 0x3 --config="(0,0,1)" --parse-ptype
 
 
 
