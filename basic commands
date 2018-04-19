@@ -79,5 +79,6 @@ grep HugePages_Free /proc/meminfo
 # runing l3fwd
 ./build/l3fwd -l 1 -n 4 -- -p 0x3 --config="(0,0,1)" --parse-ptype
 
+./build/l3fwd -l 0 -n 4 -- -p 0x3 -P -E --config="(0,0,0)" --parse-ptype
 
 
