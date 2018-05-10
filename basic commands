@@ -31,6 +31,11 @@ tar xJf dpdk-17.11.1.tar.xz
 make config T=x86_64-native-linuxapp-gcc
 make install T=x86_64-native-linuxapp-gcc
 
+You need the kernel headers, or just disable compilation of kernel modules:
+	sed -ri 's,(KNI_KMOD=).*,\1n,' build/.config
+	sed -ri 's,(IGB_UIO=).*,\1n,' build/.config
+
+
 #A small kernel module to set up the device, map device memory to user-space and register interrupts. 
 #In many cases, the standard uio_pci_generic module included in the Linux kernel can provide the uio capability. 
 #This module can be loaded using the command:
