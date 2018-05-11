@@ -1,0 +1,41 @@
+sudo apt-get update
+
+sudo apt-get upgrade
+
+apt-get install build-essential
+
+sudo apt-get install coreutils
+
+sudo apt-get install gcc-multilib
+
+sed -ri 's,(KNI_KMOD=).*,\1n,' build/.config
+sed -ri 's,(IGB_UIO=).*,\1n,' build/.config
+
+sudo apt-get install libnuma-dev
+
+sudo apt-get install build-essential checkinstall
+
+sudo apt-get install libreadline-gplv2-dev libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev
+version=2.7.13
+cd ~/Downloads/
+wget https://www.python.org/ftp/python/$version/Python-$version.tgz
+tar -xvf Python-$version.tgz
+cd Python-$version
+./configure
+make
+sudo checkinstall
+
+#Now download latest dpdk from https://dpdk.org/download
+
+tar xf dpdk.tar.gz
+
+cd dpdk
+
+make config T=x86_64-native-linuxapp-gcc
+sed -ri 's,(PMD_PCAP=).*,\1y,' build/.config
+
+make
+
+mkdir -p /mnt/huge
+mount -t hugetlbfs nodev /mnt/huge
+echo 64 > /sys/devices/system/node/node0/hugepages/hugepages-2048kB/nr_hugepages
